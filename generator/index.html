@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maze Generator | Premium Laberinto Creator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <a href="../index.html" class="nav-link" style="font-size: 0.8rem;">← Back to Solver</a>
+            </div>
+            <h1>Maze Generator</h1>
+            <p class="subtitle">Generate and export custom mazes for training</p>
+        </header>
+
+        <main>
+            <div class="controls">
+                <div class="input-group">
+                    <label for="cols">Columns (X)</label>
+                    <input type="number" id="cols" value="10" min="2" max="50">
+                </div>
+                <div class="input-group">
+                    <label for="rows">Rows (Y)</label>
+                    <input type="number" id="rows" value="10" min="2" max="50">
+                </div>
+                <div class="actions">
+                    <button id="generate" class="btn-primary">Generate Maze</button>
+                    <button id="download" class="btn-secondary" disabled>Download .txt</button>
+                </div>
+            </div>
+
+            <div class="preview-container">
+                <canvas id="preview"></canvas>
+            </div>
+            <div class="stats">
+                <span id="wall-count">Total Walls: 0</span>
+                <span>Entrance: Left | Exit: Right</span>
+            </div>
+        </main>
+    </div>
+
+    <script src="maze.js"></script>
+    <script src="main.js"></script>
+</body>
+
+</html>
