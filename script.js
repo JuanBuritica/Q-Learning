@@ -149,33 +149,8 @@ function drawMaze() {
 
     ctx.clearRect(0, 0, width, height);
 
-    // Draw walls
-    ctx.strokeStyle = "#333";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-
-    mazeEnv.walls.forEach(segKey => {
-        const [p1Str, p2Str] = segKey.split('|');
-        const [x1, y1] = p1Str.split(',').map(Number);
-        const [x2, y2] = p2Str.split(',').map(Number);
-
-        ctx.moveTo(x1 * cellSize, y1 * cellSize);
-        ctx.lineTo(x2 * cellSize, y2 * cellSize);
-    });
-    ctx.stroke();
-
-    // Draw Start (Green)
-    const [startR, startC] = mazeEnv.start;
-    ctx.fillStyle = "#2ecc71";
-    ctx.fillRect(startC * cellSize + 5, startR * cellSize + 5, cellSize - 10, cellSize - 10);
-
-    // Draw Goal (Red)
-    const [goalR, goalC] = mazeEnv.goal;
-    ctx.fillStyle = "#e74c3c";
-    ctx.fillRect(goalC * cellSize + 5, goalR * cellSize + 5, cellSize - 10, cellSize - 10);
-
-    // Grid lines
-    ctx.strokeStyle = "#eee";
+    // Grid lines (subtle)
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.05)";
     ctx.lineWidth = 1;
     ctx.beginPath();
     for (let r = 0; r <= mazeEnv.n_rows; r++) {
@@ -187,25 +162,78 @@ function drawMaze() {
         ctx.lineTo(c * cellSize, height);
     }
     ctx.stroke();
+
+    // Draw walls (Glow effect)
+    ctx.strokeStyle = "#06b6d4";
+    ctx.lineWidth = 3;
+    ctx.lineCap = "round";
+    ctx.shadowBlur = 10;
+    ctx.shadowColor = "rgba(6, 182, 212, 0.5)";
+
+    ctx.beginPath();
+    mazeEnv.walls.forEach(segKey => {
+        const [p1Str, p2Str] = segKey.split('|');
+        const [x1, y1] = p1Str.split(',').map(Number);
+        const [x2, y2] = p2Str.split(',').map(Number);
+
+        ctx.moveTo(x1 * cellSize, y1 * cellSize);
+        ctx.lineTo(x2 * cellSize, y2 * cellSize);
+    });
+    ctx.stroke();
+
+    // Reset shadow for other drawings
+    ctx.shadowBlur = 0;
+
+    // Draw Start (Soft Green Circle)
+    const [startR, startC] = mazeEnv.start;
+    ctx.fillStyle = "rgba(46, 204, 113, 0.3)";
+    ctx.beginPath();
+    ctx.arc(startC * cellSize + cellSize / 2, startR * cellSize + cellSize / 2, cellSize / 2.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = "#2ecc71";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Draw Goal (Soft Red Circle)
+    const [goalR, goalC] = mazeEnv.goal;
+    ctx.fillStyle = "rgba(231, 76, 60, 0.3)";
+    ctx.beginPath();
+    ctx.arc(goalC * cellSize + cellSize / 2, goalR * cellSize + cellSize / 2, cellSize / 2.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = "#e74c3c";
+    ctx.lineWidth = 2;
+    ctx.stroke();
 }
 
 function drawAgent(r, c) {
     drawMaze();
-    ctx.fillStyle = "#3498db";
+
+    // Agent Glow
+    ctx.shadowBlur = 15;
+    ctx.shadowColor = "rgba(99, 102, 241, 0.8)";
+    ctx.fillStyle = "#818cf8";
+
     ctx.beginPath();
     ctx.arc(
         c * cellSize + cellSize / 2,
         r * cellSize + cellSize / 2,
-        cellSize / 3,
+        cellSize / 3.5,
         0,
         Math.PI * 2
     );
+    ctx.fill();
+
+    // Inner white dot for "eye" look
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = "white";
+    ctx.beginPath();
+    ctx.arc(c * cellSize + cellSize / 2, r * cellSize + cellSize / 2, cellSize / 8, 0, Math.PI * 2);
     ctx.fill();
 }
 
 async function animatePath(path) {
     for (const [r, c] of path) {
         drawAgent(r, c);
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise(resolve => setTimeout(resolve, 80));
     }
 }
