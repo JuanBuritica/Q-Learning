@@ -35,7 +35,7 @@ function uploadMaze() {
         try {
             mazeEnv = new MazeEnv(content);
             log("Maze loaded successfully (Client-side).");
-            log(`Dimensions: ${mazeEnv.n_rows}x${mazeEnv.n_cols}`);
+            log(`Dimensions: ${mazeEnv.n_cols}x${mazeEnv.n_rows}`);
 
             document.getElementById("trainBtn").disabled = false;
             document.getElementById("solveBtn").disabled = true; // Reset solve button
@@ -225,8 +225,35 @@ function drawMaze() {
     ctx.stroke();
 }
 
-function drawAgent(r, c) {
+function drawPath(path) {
+    if (path.length < 2) return;
+
+    ctx.strokeStyle = "rgba(129, 140, 248, 0.4)";
+    ctx.lineWidth = Math.max(2, cellSize / 6);
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.shadowBlur = 10;
+    ctx.shadowColor = "rgba(129, 140, 248, 0.5)";
+
+    ctx.beginPath();
+    ctx.moveTo(
+        path[0][1] * cellSize + cellSize / 2,
+        path[0][0] * cellSize + cellSize / 2
+    );
+
+    for (let i = 1; i < path.length; i++) {
+        ctx.lineTo(
+            path[i][1] * cellSize + cellSize / 2,
+            path[i][0] * cellSize + cellSize / 2
+        );
+    }
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+}
+
+function drawAgent(r, c, history = []) {
     drawMaze();
+    drawPath(history);
 
     // Agent Glow
     ctx.shadowBlur = 15;
@@ -252,8 +279,10 @@ function drawAgent(r, c) {
 }
 
 async function animatePath(path) {
+    const history = [];
     for (const [r, c] of path) {
-        drawAgent(r, c);
+        history.push([r, c]);
+        drawAgent(r, c, history);
         await new Promise(resolve => setTimeout(resolve, 80));
     }
 }

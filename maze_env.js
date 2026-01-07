@@ -29,7 +29,7 @@ class MazeEnv {
 
         const [origRows, origCols] = lines[0].split(/\s+/).map(Number);
 
-        // --- Dimensions after transpose (logic from notebook) ---
+        // Dimensions: cols is Width (X), rows is Height (Y)
         this.n_rows = origRows;
         this.n_cols = origCols;
 
@@ -39,14 +39,11 @@ class MazeEnv {
 
         for (let i = 0; i < k; i++) {
             if (lines[2 + i]) {
-                const [x1, y1, x2, y2] = lines[2 + i].split(/\s+/).map(Number);
+                const [y1, x1, y2, x2] = lines[2 + i].split(/\s+/).map(Number);
 
-                // --- PURE TRANSPOSE (x,y) -> (y,x) logic from notebook ---
-                const tx1 = y1, ty1 = x1;
-                const tx2 = y2, ty2 = x2;
-
-                const p1 = [tx1, ty1];
-                const p2 = [tx2, ty2];
+                // Store as [x, y] internally
+                const p1 = [x1, y1];
+                const p2 = [x2, y2];
 
                 // Simplified serialization for Set matching
                 const seg = this._serializeSegment(p1, p2);
