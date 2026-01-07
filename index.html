@@ -4,40 +4,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Q-Learning Maze Solver</title>
+    <title>Q-Maze | Reinforcement Learning Solver</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
 
 <body>
     <div class="container">
-        <h1>Q-Learning Maze Solver</h1>
+        <h1>Q-Maze Solver</h1>
 
         <div class="controls">
-            <div class="control-group">
-                <h3>1. Upload Maze</h3>
+            <section class="control-group">
+                <h3><span>📂</span> Load Maze</h3>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">Select your .txt maze definition
+                    file</p>
                 <input type="file" id="mazeFile" accept=".txt">
-                <button onclick="uploadMaze()">Upload</button>
-            </div>
+                <button onclick="uploadMaze()">Upload Data</button>
+            </section>
 
-            <div class="control-group">
-                <h3>2. Training</h3>
-                <label>Episodes: <input type="number" id="episodes" value="2000"></label>
-                <button onclick="trainAgent()" id="trainBtn" disabled>Train Agent</button>
-                <div id="trainStatus"></div>
-            </div>
+            <section class="control-group">
+                <h3><span>⚙️</span> Training</h3>
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <label for="episodes">Iterations</label>
+                    <input type="number" id="episodes" value="2000" min="100" max="10000" style="width: 100px;">
+                </div>
+                <button onclick="trainAgent()" id="trainBtn" disabled>Start Training</button>
+            </section>
 
-            <div class="control-group">
-                <h3>3. Solution</h3>
-                <button onclick="solveMaze()" id="solveBtn" disabled>Show Solution</button>
-            </div>
+            <section class="control-group">
+                <h3><span>🚀</span> Execution</h3>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">Visualize the optimal path</p>
+                <button onclick="solveMaze()" id="solveBtn" disabled>Show Best Path</button>
+            </section>
         </div>
 
         <div class="visualization">
             <canvas id="mazeCanvas"></canvas>
         </div>
 
-        <div id="log"></div>
+        <div id="log">
+            <div>Welcome to Q-Maze. Upload a maze to begin.</div>
+        </div>
     </div>
 
     <script src="maze_env.js"></script>
