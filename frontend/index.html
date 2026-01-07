@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q-Learning Maze Solver</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Q-Learning Maze Solver</h1>
+
+        <div class="controls">
+            <div class="control-group">
+                <h3>1. Upload Maze</h3>
+                <input type="file" id="mazeFile" accept=".txt">
+                <button onclick="uploadMaze()">Upload</button>
+            </div>
+
+            <div class="control-group">
+                <h3>2. Training</h3>
+                <label>Episodes: <input type="number" id="episodes" value="2000"></label>
+                <button onclick="trainAgent()" id="trainBtn" disabled>Train Agent</button>
+                <div id="trainStatus"></div>
+            </div>
+
+            <div class="control-group">
+                <h3>3. Solution</h3>
+                <button onclick="solveMaze()" id="solveBtn" disabled>Show Solution</button>
+            </div>
+        </div>
+
+        <div class="visualization">
+            <canvas id="mazeCanvas"></canvas>
+        </div>
+
+        <div id="log"></div>
+    </div>
+
+    <script src="maze_env.js"></script>
+    <script src="agent.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
