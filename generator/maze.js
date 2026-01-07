@@ -123,11 +123,11 @@ function generateMaze(cols, rows) {
 }
 
 function formatMaze(maze) {
-    let output = `${maze.rows} ${maze.cols}\n`;
+    let output = `${maze.cols} ${maze.rows}\n`;
     output += `${maze.walls.length}\n`;
     maze.walls.forEach(w => {
         // Output format: x1 y1 x2 y2
-        // Since v1 is [row, col], x is col and y is row
+        // Since v1 is [row, col], x is col (index 1) and y is row (index 0)
         output += `${w.v1[1]} ${w.v1[0]} ${w.v2[1]} ${w.v2[0]}\n`;
     });
     return output;
