@@ -15,10 +15,16 @@
         <div class="controls">
             <section class="control-group">
                 <h3><span>📂</span> Load Maze</h3>
-                <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">Select your .txt maze definition
-                    file</p>
-                <input type="file" id="mazeFile" accept=".txt">
-                <button onclick="uploadMaze()">Upload Data</button>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">Select your .txt maze definition file</p>
+                <div style="display: flex; gap: 10px; flex-direction: column;">
+                    <input type="file" id="mazeFile" accept=".txt">
+                    <button onclick="uploadMaze()">Upload Data</button>
+                    <div style="text-align: center; margin-top: 5px;">
+                        <span style="font-size: 0.8rem; color: var(--text-secondary);">Don't have a maze?</span>
+                        <br>
+                        <a href="generator/index.html" class="nav-link">Create New Maze →</a>
+                    </div>
+                </div>
             </section>
 
             <section class="control-group">

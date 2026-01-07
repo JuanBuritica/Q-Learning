@@ -8,6 +8,10 @@ let cellSize = 30;
 document.addEventListener("DOMContentLoaded", () => {
     canvas = document.getElementById("mazeCanvas");
     ctx = canvas.getContext("2d");
+
+    window.addEventListener("resize", () => {
+        if (mazeEnv) drawMaze();
+    });
 });
 
 function log(msg) {
@@ -69,13 +73,17 @@ function trainAgent() {
         });
 
         const startTime = performance.now();
+        const maxStepsPerEpisode = Math.max(200, mazeEnv.n_rows * mazeEnv.n_cols);
 
         for (let ep = 0; ep < episodes; ep++) {
+            if (ep % Math.max(1, Math.floor(episodes / 10)) === 0 && ep > 0) {
+                log(`Training... ${Math.round((ep / episodes) * 100)}% complete`);
+            }
             let state = mazeEnv.reset();
             let done = false;
 
-            // Step limit to prevent infinite loops
-            for (let step = 0; step < 200; step++) {
+            // Step limit to prevent infinite loops, scaled by maze size
+            for (let step = 0; step < maxStepsPerEpisode; step++) {
                 const action = agent.chooseAction(state);
                 const [nextState, reward, isDone] = mazeEnv.step(action);
                 agent.update(state, action, reward, nextState, isDone);
@@ -141,6 +149,18 @@ function solveMaze() {
 function drawMaze() {
     if (!mazeEnv) return;
 
+    const container = canvas.parentElement;
+    const padding = 20;
+    const availableWidth = container.clientWidth - padding * 2;
+    const availableHeight = container.clientHeight - padding * 2;
+
+    // Calculate cell size to fit the container
+    cellSize = Math.min(
+        availableWidth / mazeEnv.n_cols,
+        availableHeight / mazeEnv.n_rows,
+        40 // Max cell size for small mazes
+    );
+
     const width = mazeEnv.n_cols * cellSize;
     const height = mazeEnv.n_rows * cellSize;
 
@@ -165,9 +185,9 @@ function drawMaze() {
 
     // Draw walls (Glow effect)
     ctx.strokeStyle = "#06b6d4";
-    ctx.lineWidth = 3;
+    ctx.lineWidth = Math.max(1, cellSize / 10);
     ctx.lineCap = "round";
-    ctx.shadowBlur = 10;
+    ctx.shadowBlur = cellSize / 3;
     ctx.shadowColor = "rgba(6, 182, 212, 0.5)";
 
     ctx.beginPath();
