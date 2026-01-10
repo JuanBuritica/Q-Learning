@@ -10,8 +10,34 @@ document.addEventListener("DOMContentLoaded", () => {
     ctx = canvas.getContext("2d");
 
     window.addEventListener("resize", () => {
-        if (mazeEnv) drawMaze();
+        if (mazeEnv) {
+            drawMaze();
+        }
     });
+
+    // Check for auto-loaded maze from generator
+    const autoMaze = localStorage.getItem('autoLoadMaze');
+    if (autoMaze) {
+        localStorage.removeItem('autoLoadMaze');
+        try {
+            mazeEnv = new MazeEnv(autoMaze);
+            log("<strong>Maze loaded from Generator.</strong>");
+            log(`Dimensions: ${mazeEnv.n_cols}x${mazeEnv.n_rows}`);
+
+            document.getElementById("trainBtn").disabled = false;
+            document.getElementById("solveBtn").disabled = true;
+            document.getElementById("empty-state").style.display = 'none';
+
+            drawMaze();
+
+            // Auto-start training
+            log("Auto-starting training...");
+            trainAgent();
+
+        } catch (err) {
+            log(`Error loading generated maze: ${err.message}`);
+        }
+    }
 });
 
 function log(msg) {
@@ -39,6 +65,7 @@ function uploadMaze() {
 
             document.getElementById("trainBtn").disabled = false;
             document.getElementById("solveBtn").disabled = true; // Reset solve button
+            document.getElementById("empty-state").style.display = 'none';
 
             drawMaze();
         } catch (err) {
@@ -183,12 +210,11 @@ function drawMaze() {
     }
     ctx.stroke();
 
-    // Draw walls (Glow effect)
-    ctx.strokeStyle = "#06b6d4";
+    // Draw walls (Clean White)
+    ctx.strokeStyle = "#ffffff";
     ctx.lineWidth = Math.max(1, cellSize / 10);
     ctx.lineCap = "round";
-    ctx.shadowBlur = cellSize / 3;
-    ctx.shadowColor = "rgba(6, 182, 212, 0.5)";
+    ctx.shadowBlur = 0;
 
     ctx.beginPath();
     mazeEnv.walls.forEach(segKey => {

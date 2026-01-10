@@ -20,7 +20,7 @@ function drawMaze(maze) {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    ctx.strokeStyle = '#818cf8';
+    ctx.strokeStyle = '#ffffff';
     ctx.lineWidth = 2;
     ctx.lineCap = 'round';
 
@@ -39,7 +39,7 @@ function drawMaze(maze) {
     });
 
     // Draw full grid border with entrance and exit gaps
-    ctx.strokeStyle = '#818cf8';
+    ctx.strokeStyle = '#ffffff';
 
     // We already have internal walls, now we need to visualize the boundary accurately
     // The maze generator already handles entrance/exit by REMOVING walls.
@@ -55,6 +55,7 @@ function handleGenerate() {
 
     wallCountEl.textContent = `Total Walls: ${currentMaze.walls.length}`;
     downloadBtn.disabled = false;
+    document.getElementById('use-maze').disabled = false;
 }
 
 function handleDownload() {
@@ -73,8 +74,17 @@ function handleDownload() {
     URL.revokeObjectURL(url);
 }
 
+const useBtn = document.getElementById('use-maze');
+
 generateBtn.addEventListener('click', handleGenerate);
 downloadBtn.addEventListener('click', handleDownload);
+
+useBtn.addEventListener('click', () => {
+    if (!currentMaze) return;
+    const content = formatMaze(currentMaze);
+    localStorage.setItem('autoLoadMaze', content);
+    window.location.href = '../index.html';
+});
 
 // Initial generate
 handleGenerate();

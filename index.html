@@ -12,39 +12,47 @@
     <div class="container">
         <h1>Q-Maze Solver</h1>
 
-        <div class="controls">
-            <section class="control-group">
-                <h3><span>📂</span> Load Maze</h3>
-                <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">Select your .txt maze definition file</p>
-                <div style="display: flex; gap: 10px; flex-direction: column;">
-                    <input type="file" id="mazeFile" accept=".txt">
-                    <button onclick="uploadMaze()">Upload Data</button>
-                    <div style="text-align: center; margin-top: 5px;">
-                        <span style="font-size: 0.8rem; color: var(--text-secondary);">Don't have a maze?</span>
-                        <br>
-                        <a href="generator/index.html" class="nav-link">Create New Maze →</a>
+        <div class="main-layout">
+            <div class="controls-sidebar">
+                <section class="control-group">
+                    <h3><span>📂</span> Load Maze</h3>
+                    <p style="font-size: 0.75rem; color: var(--text-secondary); margin: 0;">Select your .txt maze
+                        definition file</p>
+                    <div style="display: flex; gap: 8px; flex-direction: column;">
+                        <input type="file" id="mazeFile" accept=".txt">
+                        <button onclick="uploadMaze()">Upload Data</button>
                     </div>
+                    <div style="margin-top: 5px;">
+                        <a href="generator/index.html" class="nav-link">← Create New Maze</a>
+                    </div>
+                </section>
+
+                <section class="control-group">
+                    <h3><span>⚙️</span> Training</h3>
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <label for="episodes"
+                            style="font-size: 0.85rem; color: var(--text-secondary);">Iterations</label>
+                        <input type="number" id="episodes" value="2000" min="100" max="10000" style="width: 80px;">
+                    </div>
+                    <button onclick="trainAgent()" id="trainBtn" disabled>Start Training</button>
+
+                    <div style="border-top: 1px solid var(--border); margin: 0.5rem 0;"></div>
+
+                    <h3><span>🚀</span> Execution</h3>
+                    <button onclick="solveMaze()" id="solveBtn" disabled>Show Best Path</button>
+                </section>
+            </div>
+
+            <div class="visualization" style="position: relative;">
+                <canvas id="mazeCanvas"></canvas>
+                <div id="empty-state"
+                    style="position: absolute; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+                    <div style="font-size: 3rem; opacity: 0.2;">🗺️</div>
+                    <p style="color: var(--text-secondary); margin: 0;">No maze loaded yet</p>
+                    <a href="generator/index.html" class="nav-link" style="margin: 0; background: var(--bg);">+ Create
+                        New Maze</a>
                 </div>
-            </section>
-
-            <section class="control-group">
-                <h3><span>⚙️</span> Training</h3>
-                <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <label for="episodes">Iterations</label>
-                    <input type="number" id="episodes" value="2000" min="100" max="10000" style="width: 100px;">
-                </div>
-                <button onclick="trainAgent()" id="trainBtn" disabled>Start Training</button>
-            </section>
-
-            <section class="control-group">
-                <h3><span>🚀</span> Execution</h3>
-                <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">Visualize the optimal path</p>
-                <button onclick="solveMaze()" id="solveBtn" disabled>Show Best Path</button>
-            </section>
-        </div>
-
-        <div class="visualization">
-            <canvas id="mazeCanvas"></canvas>
+            </div>
         </div>
 
         <div id="log">
